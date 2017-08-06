@@ -42,7 +42,7 @@
       }
       
       // делаю так чтобы item принимал еще одно меню
-      function MenuItem(myHref, myName) {
+      function MenuItem(myHref, myName, mySubMenu) {
         Container.call(this);
         this.className = 'menu-item';
         this.href = myHref;
@@ -55,41 +55,39 @@
 
       MenuItem.prototype.render = function() {
         var result = '<li class="' + this.className + '"><a href="' + this.href
-          + '">' + this.name;
-        for (var sub_menu in this.subMenu) {
+          + '">' + this.name + '"</a>"';
           if(this.subMenu instanceof SubMenu) {
             result += this.subMenu.render();
           }
-        }
-        result += '</a></li>';
+        result += '</li>';
         return
       }
       
       function SubMenu(myId, myClass, myItems) {
-        Container.call(this);
+        Menu.call(this);
         this.id = myId;
         this.className = myClass;
         this.items = myItems;
       }
       
-      SubMenu.prototype = new Menu;
+      SubMenu.prototype = Object.create(Menu.prototype);
       SubMenu.prototype.constructor = SubMenu;
       
-      function SubMenuItem(myHref, myName) {
-        Container.call(this);
+      function SubMenuItem (myHref, myName) {
+        MenuItem.call(this);
         this.className = 'menu-item';
         this.href = myHref;
         this.name = myName;
       }
       
-      SubMenuItem.prototype = Object.create(Container.prototype);
+      SubMenuItem.prototype = Object.create(MenuItem.prototype);
       SubMenuItem.prototype.constructor = SubMenuItem;
       
       var subMenuItem1 = new SubMenuItem('/', 'Главная');
       var subMenuItem2 = new SubMenuItem('/blog', 'Блог');
       var subMenu = new SubMenu('anotherId', 'anotherClass', {0: subMenuItem1, 1: subMenuItem2})      
       var menuItem1 = new MenuItem('/', 'Главная', subMenu);
-      var menuItem2 = new MenuItem('/blog', 'Блог');
+      var menuItem2 = new MenuItem('/blog', 'Блог', subMenu);
       var menu = new Menu('myId', 'myClass', {0: menuItem1, 1: menuItem2});
 
       var div = document.write(menu.render());
