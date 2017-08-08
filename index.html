@@ -11,7 +11,6 @@
         this.className = "";
         this.htmlCode = "";
       }
-
       Container.prototype.render = function() {
         return this.htmlCode;
       }
@@ -19,23 +18,21 @@
     //  Container.prototype.remove = function() {
   //        return this = null
     //  }
-
       function Menu(myId, myClass, myItems) {
         Container.call(this);
         this.id = myId;
         this.className = myClass;
         this.items = myItems;
       }
-
       Menu.prototype = Object.create(Container.prototype);
       Menu.prototype.constructor = Menu;
-
       Menu.prototype.render = function() {
         var result = '<ul class="' + this.className + '" id="' + this.id + '">';
         for(var item in this.items) {
           if(this.items[item] instanceof MenuItem) {
             result += this.items[item].render();
           }
+          
         }
         result += '</ul>';
         return result;
@@ -49,18 +46,16 @@
         this.name = myName;
         this.subMenu = mySubMenu;
       }
-
       MenuItem.prototype = Object.create(Container.prototype);
       MenuItem.prototype.constructor = MenuItem;
-
       MenuItem.prototype.render = function() {
-        var result = '<li class="' + this.className + '"><a href="' + this.href
-          + '">' + this.name + '"</a>"';
+        var result = '<li class=' + this.className + '><a href=' + this.href
+          + '>' + this.name + '</a>';
           if(this.subMenu instanceof SubMenu) {
             result += this.subMenu.render();
           }
         result += '</li>';
-        return
+        return result;
       }
       
       function SubMenu(myId, myClass, myItems) {
@@ -83,15 +78,21 @@
       SubMenuItem.prototype = Object.create(MenuItem.prototype);
       SubMenuItem.prototype.constructor = SubMenuItem;
       
-      var subMenuItem1 = new SubMenuItem('/', 'Главная');
-      var subMenuItem2 = new SubMenuItem('/blog', 'Блог');
-      var subMenu = new SubMenu('anotherId', 'anotherClass', {0: subMenuItem1, 1: subMenuItem2})      
-      var menuItem1 = new MenuItem('/', 'Главная', subMenu);
-      var menuItem2 = new MenuItem('/blog', 'Блог', subMenu);
-      var menu = new Menu('myId', 'myClass', {0: menuItem1, 1: menuItem2});
 
+
+      var subMenuItem1 = new SubMenuItem('/sportCloth', 'Одежда для спорта и активного отдыха');
+      var subMenuItem2 = new SubMenuItem('/sportShoe', 'Обувь для спорта и активного отдыха');
+      var subMenuItem3 = new MenuItem('/fitness', 'Тренажёры и фитнес', subMenuTrainer);
+      var subMenuTrainer = new SubMenu('subMenuTrain', 'Trainer', {0: subItemTrainer1, 1: subItemTrainer2});
+      var subItemTrainer1 = new SubMenuItem('/cardiotrainer', 'Кардиотренажер');
+      var subItemTrainer2 = new SubMenuItem('/weightrainer', 'Силовой тренажер')
+      var subMenu1 = new SubMenu('subMenu', 'catalog', {0: subMenuItem1, 1: subMenuItem2, 2: subMenuItem3})      
+      var menuItem1 = new SubMenuItem('/', 'Главная');
+      var menuItem2 = new SubMenuItem('/office', 'Кабинет');
+      var menuItem3 = new MenuItem('/catalog', 'Каталог товаров', subMenu1);
+      var menuItem4 = new SubMenuItem('/bucket', 'Корзина');
+      var menu = new Menu('myId', 'myClass', {0: menuItem1, 1: menuItem2, 2: menuItem3, 3: menuItem4});
       var div = document.write(menu.render());
-      
       
     </script>
 </body>

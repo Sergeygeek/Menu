@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>homework</title>
+</head>
+<body>
+    <script>
+        function Container() {
+        this.id = "";
+        this.className = "";
+        this.htmlCode = "";
+      }
+      Container.prototype.render = function() {
+        return this.htmlCode;
+      }
+      // Удаляем контейнер
+    //  Container.prototype.remove = function() {
+  //        return this = null
+    //  }
+      function Menu(myId, myClass, myItems) {
+        Container.call(this);
+        this.id = myId;
+        this.className = myClass;
+        this.items = myItems;
+      }
+      Menu.prototype = Object.create(Container.prototype);
+      Menu.prototype.constructor = Menu;
+      Menu.prototype.render = function() {
+        var result = '<ul class="' + this.className + '" id="' + this.id + '">';
+        for(var item in this.items) {
+          if(this.items[item] instanceof MenuItem) {
+            result += this.items[item].render();
+          }
+          if(this.items[item] instanceof Menu) {
+            result += this.items[item].render();
+          }
+        }
+        result += '</ul>';
+        return result;
+      }
+      
+      function MenuItem(myHref, myName) {
+        Container.call(this);
+        this.className = 'menu-item';
+        this.href = myHref;
+        this.name = myName;
+      }
+      
+      MenuItem.prototype = Object.create(Container.prototype);
+      MenuItem.prototype.constructor = MenuItem;
+      MenuItem.prototype.render = function() {
+        var result = '<li class=' + this.className + '><a href=' + this.href
+          + '>' + this.name + '</a></li>';
+        return result;
+      }
+            
+      var subMenuItem1 = new MenuItem('/', 'Главная');
+      var subMenuItem2 = new MenuItem('/blog', 'Блог');     
+      var menuItem1 = new MenuItem('/', 'Главная');
+      var menuItem2 = new Menu('/blog', 'Блог', {0: subMenuItem1, 1: subMenuItem2});
+      var menu = new Menu('myId', 'myClass', {0: menuItem1, 1: menuItem2});
+      var div = document.write(menu.render());
+      
+    </script>
+</body>
+</html>
